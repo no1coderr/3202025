@@ -1,0 +1,113 @@
+#include<iostream>
+using namespace std;
+class CongDan {
+	private:
+		double cccd;
+		string hoten;
+		int tuoi;
+		string nghenghiep;
+		string quoctich;
+	public:
+	CongDan(double cccd = 0 , string hoten = " ", int tuoi = 0 , string nghenghiep = " " , string quoctich= " ") {
+		this->cccd = cccd;
+		this->hoten = hoten;
+		this->tuoi = tuoi;
+		this->nghenghiep= nghenghiep;
+		
+	}
+	~CongDan() {
+	}
+	friend istream& operator>>(istream& is, CongDan& cd) {
+        cout << "NHAP CCCD: ";
+        is >> cd.cccd;
+        is.ignore();
+        cout << "NHAP HO TEN: ";
+        getline(is, cd.hoten);
+        cout << "NHAP TUOI: ";
+        is >> cd.tuoi;
+        is.ignore();
+        cout << "NHAP NGHE NGHIEP: ";
+        getline(is, cd.nghenghiep);
+        cout << "NHAP QUOC TICH: ";
+        getline(is, cd.quoctich);
+        return is;
+    }
+     friend ostream& operator<<(ostream& os, const CongDan& cd) {
+        os << "CCCD: " << cd.cccd << ", Ho Ten: " << cd.hoten
+           << ", Tuoi: " << cd.tuoi << ", Nghe Nghiep: " << cd.nghenghiep
+           << ", Quoc Tich: " << cd.quoctich;
+        return os;
+    }
+
+    bool operator<(const CongDan& other) const {
+        return cccd < other.cccd;
+    }
+
+    double getCCCD() const {
+        return cccd;
+    }
+
+    string getQuocTich() const {
+        return quoctich;
+    }
+
+	
+};
+void NhapDanhSach(CongDan ds[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << "\nNhap thong tin cong dan thu " << i + 1 << ":\n";
+        cin >> ds[i];
+    }
+}
+
+void InDanhSach(const CongDan ds[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << ds[i] << endl;
+    }
+}
+
+void SapXepDanhSach(CongDan ds[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (ds[j] < ds[i]) {
+                CongDan temp = ds[i];
+                ds[i] = ds[j];
+                ds[j] = temp;
+            }
+        }
+    }
+}
+
+void ThemCongDan(CongDan ds[], int &n,  CongDan& cd) {
+    int i = n - 1;
+    while (i >= 0 && ds[i].getCCCD() > cd.getCCCD()) {
+        ds[i + 1] = ds[i];
+        i--;
+    }
+    ds[i + 1] = cd;
+    n++;
+}
+
+int main() {
+    int n;
+    cout << "Nhap so luong cong dan: ";
+    cin >> n;
+    CongDan ds[100]; 
+    NhapDanhSach(ds, n);
+    
+    cout << "\nDanh sach cong dan:\n";
+    InDanhSach(ds, n);
+    
+    SapXepDanhSach(ds, n);
+    cout << "\nDanh sach sau khi sap xep:\n";
+    InDanhSach(ds, n);
+    
+    CongDan cd_moi;
+    cout << "\nNhap thong tin cong dan moi:\n";
+    cin >> cd_moi;
+    ThemCongDan(ds, n, cd_moi);
+    cout << "\nDanh sach sau khi them:\n";
+    InDanhSach(ds, n);
+    
+    return 0;
+}
